@@ -38,6 +38,15 @@ typedef NS_ENUM(NSUInteger, RSKImageCropMode) {
     RSKImageCropModeCustom
 };
 
+/**
+ Types of zoom modes supported.
+ */
+typedef NS_ENUM(NSUInteger, RSKImageZoomMode) {
+    RSKImageZoomModeNormal,
+    RSKImageZoomModeFitVertical,
+    RSKImageZoomModeFitHorizontal
+};
+
 @interface RSKImageCropViewController : UIViewController
 
 /**
@@ -53,7 +62,7 @@ typedef NS_ENUM(NSUInteger, RSKImageCropMode) {
  @param originalImage The image for cropping.
  @param cropMode The mode for cropping.
  */
-- (instancetype)initWithImage:(UIImage *)originalImage cropMode:(RSKImageCropMode)cropMode;
+- (instancetype)initWithImage:(UIImage *)originalImage cropMode:(RSKImageCropMode)cropMode zoomMode:(RSKImageZoomMode) zoomMode;
 
 ///-----------------------------
 /// @name Accessing the Delegate

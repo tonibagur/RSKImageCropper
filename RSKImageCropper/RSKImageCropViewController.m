@@ -74,6 +74,7 @@ static const CGFloat kLayoutImageScrollViewAnimationDuration = 0.25;
 @end
 
 @implementation RSKImageCropViewController
+RSKImageZoomMode _zoomMode;
 
 #pragma mark - Lifecycle
 
@@ -86,6 +87,7 @@ static const CGFloat kLayoutImageScrollViewAnimationDuration = 0.25;
         _maskLayerLineWidth = 1.0;
         _rotationEnabled = NO;
         _cropMode = RSKImageCropModeCircle;
+        _zoomMode = RSKImageZoomModeNormal;
         
         _portraitCircleMaskRectInnerEdgeInset = 15.0f;
         _portraitSquareMaskRectInnerEdgeInset = 20.0f;
@@ -115,11 +117,12 @@ static const CGFloat kLayoutImageScrollViewAnimationDuration = 0.25;
     return self;
 }
 
-- (instancetype)initWithImage:(UIImage *)originalImage cropMode:(RSKImageCropMode)cropMode
+- (instancetype)initWithImage:(UIImage *)originalImage cropMode:(RSKImageCropMode)cropMode zoomMode:(RSKImageZoomMode) zoomMode
 {
     self = [self initWithImage:originalImage];
     if (self) {
         _cropMode = cropMode;
+        _zoomMode = zoomMode;
     }
     return self;
 }
@@ -606,12 +609,24 @@ static const CGFloat kLayoutImageScrollViewAnimationDuration = 0.25;
 - (void)resetZoomScale
 {
     CGFloat zoomScale;
-    if (CGRectGetWidth(self.view.bounds) > CGRectGetHeight(self.view.bounds)) {
+    NSLog(@"zoomscale_old:%f",self.imageScrollView.zoomScale);
+    if(_zoomMode==RSKImageZoomModeNormal){
+        if (CGRectGetWidth(self.view.bounds) > CGRectGetHeight(self.view.bounds)) {
+            zoomScale = CGRectGetHeight(self.view.bounds) / self.originalImage.size.height;
+            NSLog(@"zoomscale1:%f,get_width:%f,get_height:%f",zoomScale,CGRectGetWidth(self.view.bounds),CGRectGetHeight(self.view.bounds));
+        } else {
+            zoomScale = CGRectGetWidth(self.view.bounds) / self.originalImage.size.width;
+            NSLog(@"zoomscale2:%f,get_width:%f,get_height:%f",zoomScale,CGRectGetWidth(self.view.bounds),CGRectGetHeight(self.view.bounds));
+        }
+    } else if(_zoomMode==RSKImageZoomModeFitVertical) {
         zoomScale = CGRectGetHeight(self.view.bounds) / self.originalImage.size.height;
-    } else {
+        self.imageScrollView.minimumZoomScale=zoomScale;
+    } else { //_zoomMode==RSKImageZoomModeFitHorizontal
         zoomScale = CGRectGetWidth(self.view.bounds) / self.originalImage.size.width;
+        self.imageScrollView.minimumZoomScale=zoomScale;
     }
     self.imageScrollView.zoomScale = zoomScale;
+    
 }
 
 - (NSArray *)intersectionPointsOfLineSegment:(RSKLineSegment)lineSegment withRect:(CGRect)rect
