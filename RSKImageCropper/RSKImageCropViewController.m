@@ -859,7 +859,9 @@ RSKImageZoomMode _zoomMode;
     
     UIImageOrientation imageOrientation = image.imageOrientation;
     //TODO: Review this horrible hack
-    imageOrientation=UIImageOrientationRight;
+    if (imageOrientation==UIImageOrientationLeftMirrored){
+        imageOrientation=UIImageOrientationRight;
+    }
     if (imageOrientation == UIImageOrientationRight || imageOrientation == UIImageOrientationRightMirrored) {
         cropRect.origin.x = y;
         cropRect.origin.y = round(imageSize.width - CGRectGetWidth(cropRect) - x);
