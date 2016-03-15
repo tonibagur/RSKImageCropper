@@ -275,6 +275,9 @@ typedef NS_ENUM(NSUInteger, RSKImageZoomMode) {
  */
 @property (assign, nonatomic) CGFloat landscapeCropViewTrailingAndChooseButtonTrailingHorizontalSpace;
 
+@property CGFloat targetWidth;
+@property CGFloat targetHeight;
+
 @end
 
 /**

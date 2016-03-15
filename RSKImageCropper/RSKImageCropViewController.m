@@ -619,11 +619,12 @@ RSKImageZoomMode _zoomMode;
             NSLog(@"zoomscale2:%f,get_width:%f,get_height:%f",zoomScale,CGRectGetWidth(self.view.bounds),CGRectGetHeight(self.view.bounds));
         }
     } else if(_zoomMode==RSKImageZoomModeFitVertical) {
-        zoomScale = CGRectGetHeight(self.view.bounds) / self.originalImage.size.height;
+        zoomScale = self.targetHeight / self.originalImage.size.height;
         self.imageScrollView.minimumZoomScale=zoomScale;
     } else { //_zoomMode==RSKImageZoomModeFitHorizontal
-        zoomScale = CGRectGetWidth(self.view.bounds) / self.originalImage.size.width;
+        zoomScale = self.targetWidth / self.originalImage.size.width;
         self.imageScrollView.minimumZoomScale=zoomScale;
+        
     }
     self.imageScrollView.zoomScale = zoomScale;
     
